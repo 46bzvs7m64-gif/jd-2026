@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>京东 2026 产品及采销岗位深度分析报告</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            base: '#0A0E1A',
+            elevated: '#111827',
+            'elevated-hover': '#1A2238',
+            'text-primary': '#FFFFFF',
+            'text-secondary': '#94A3B8',
+            'text-tertiary': '#64748B',
+            'brand-blue': '#00D4FF',
+            'accent-purple': '#B026FF',
+          },
+          fontFamily: {
+            sans: ['"PingFang SC"', '"Microsoft YaHei"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    :root {
+      --bg-base: #0A0E1A;
+      --bg-elevated: #111827;
+      --bg-elevated-hover: #1A2238;
+      --text-primary: #FFFFFF;
+      --text-secondary: #94A3B8;
+      --text-tertiary: #64748B;
+      --brand-blue: #00D4FF;
+      --accent-purple: #B026FF;
+      --border-line: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 212, 255, 0.4);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* 全局背景装饰 */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 80%);
+    }
+
+    .bg-glow-1, .bg-glow-2 {
+      position: fixed;
+      z-index: -1;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .bg-glow-1 {
+      top: -200px; left: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #00D4FF 0%, transparent 70%);
+    }
+    .bg-glow-2 {
+      bottom: -200px; right: -200px;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, #B026FF 0%, transparent 70%);
+    }
+
+    /* 渐变文字 */
+    .gradient-text {
+      background: linear-gradient(135deg, #00D4FF 0%, #B026FF 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    /* 玻璃态卡片 */
+    .glass-card {
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-line);
+      transition: all 0.3s ease;
+    }
+    .glass-card:hover {
+      border-color: var(--border-glow);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* 滚动揭示动画 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 导航链接 */
+    .nav-link {
+      position: relative;
+      color: var(--text-secondary);
+      transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -6px; left: 0;
+      width: 0; height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #B026FF);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-primary);
+    }
+    .nav-link.active::after, .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Tab 按钮 */
+    .tab-btn {
+      transition: all 0.25s ease;
+      border: 1px solid var(--border-line);
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(176,38,255,0.15));
+      border-color: var(--brand-blue);
+      color: var(--brand-blue);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
+    }
+
+    /* 流程节点 */
+    .flow-node {
+      position: relative;
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--border-line);
+      transition: all 0.3s ease;
+    }
+    .flow-node:hover {
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+    }
+    .flow-node::before {
+      content: '';
+      position: absolute;
+      top: 50%; right: -28px;
+      width: 28px; height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #B026FF);
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+    .flow-node.last-node::before { display: none; }
+
+    /* 数据条 */
+    .data-bar {
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .data-bar > span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #00D4FF, #B026FF);
+      border-radius: 999px;
+      width: 0;
+      transition: width 1.2s ease;
+    }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0A0E1A; }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #00D4FF, #B026FF);
+      border-radius: 4px;
+    }
+
+    /* 移动端菜单 */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .mobile-menu.open { transform: translateX(0); }
+
+    /* 渐变分隔线 */
+    .divider-gradient {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,212,255,0.5), rgba(176,38,255,0.5), transparent);
+    }
+
+    /* 关键数字徽章 */
+    .metric-chip {
+      background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(176,38,255,0.1));
+      border: 1px solid rgba(0,212,255,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+
+  <!-- 顶部导航 -->
+  <header class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-base/70 border-b border-white/5">
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-blue to-accent-purple flex items-center justify-center font-bold text-sm">JD</div>
+        <span class="font-semibold tracking-wide">京东 2026 报告</span>
+      </a>
+      <ul class="hidden lg:flex items-center gap-8 text-sm">
+        <li><a href="#summary" class="nav-link" data-target="summary">摘要</a></li>
+        <li><a href="#business" class="nav-link" data-target="business">业务分析</a></li>
+        <li><a href="#role" class="nav-link" data-target="role">采销岗位</a></li>
+        <li><a href="#opportunity" class="nav-link" data-target="opportunity">机遇挑战</a></li>
+        <li><a href="#competency" class="nav-link" data-target="competency">胜任力</a></li>
+        <li><a href="#conclusion" class="nav-link" data-target="conclusion">总结</a></li>
+      </ul>
+      <button id="mobileMenuBtn" class="lg:hidden text-text-secondary hover:text-white" aria-label="打开菜单">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-64 bg-elevated/95 backdrop-blur-xl border-l border-white/10 z-50 lg:hidden">
+    <div class="p-6 flex flex-col gap-4 text-sm">
+      <a href="#summary" class="nav-link py-2">摘要</a>
+      <a href="#business" class="nav-link py-2">业务分析</a>
+      <a href="#role" class="nav-link py-2">采销岗位</a>
+      <a href="#opportunity" class="nav-link py-2">机遇挑战</a>
+      <a href="#competency" class="nav-link py-2">胜任力</a>
+      <a href="#conclusion" class="nav-link py-2">总结</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section id="hero" class="relative min-h-screen flex items-center pt-20 pb-16 px-6">
+    <div class="max-w-7xl mx-auto w-full">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full metric-chip text-xs text-brand-blue mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse"></span>
+          2026 年度报告 · 内部分析
+        </div>
+        <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">
+          京东 2026 产品及<br />
+          <span class="gradient-text">采销岗位</span>深度分析
+        </h1>
+        <p class="text-lg md:text-xl text-text-secondary leading-relaxed mb-8 max-w-2xl">
+          AI 驱动供应链 · 又好又便宜 · 自营与 POP 双轮驱动 · 全渠道履约
+          ——平台正从货架电商演进为综合零售生态，本文全景解析自营业务的灵魂岗位「采销」。
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="#summary" class="px-6 py-3 rounded-lg bg-gradient-to-r from-brand-blue to-accent-purple text-base font-semibold hover:shadow-[0_0_30px_rgba(0,212,255,0.4)] transition-shadow">
+            开始阅读
+          </a>
+          <a href="#conclusion" class="px-6 py-3 rounded-lg border border-white/15 text-text-secondary hover:text-white hover:border-brand-blue transition-colors">
+            查看结论
+          </a>
+        </div>
+
+        <!-- 关键数据 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
+          <div class="glass-card rounded-xl p-5">
+            <div class="text-3xl md:text-4xl font-bold gradient-text font-mono">3464<span class="text-base ml-1 text-text-secondary">亿</span></div>
+            <div class="text-xs text-text-secondary mt-2">二季度集团营收</div>
+          </div>
+          <div class="glass-card rounded-xl p-5">
+            <div class="text-3xl md:text-4xl font-bold gradient-text font-mono">22.9<span class="text-base ml-1 text-text-secondary">%</span></div>
+            <div class="text-xs text-text-secondary mt-2">服务收入占比</div>
+          </div>
+          <div class="glass-card rounded-xl p-5">
+            <div class="text-3xl md:text-4xl font-bold gradient-text font-mono">双<span class="text-base ml-1 text-text-secondary">位数</span></div>
+            <div class="text-xs text-text-secondary mt-2">年活跃用户增速</div>
+          </div>
+          <div class="glass-card rounded-xl p-5">
+            <div class="text-3xl md:text-4xl font-bold gradient-text font-mono">5<span class="text-base ml-1 text-text-secondary">大</span></div>
+            <div class="text-xs text-text-secondary mt-2">业务板块拆解</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 报告摘要 -->
+  <section id="summary" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal">
+        <div class="text-xs text-brand-blue font-mono mb-3">01 / REPORT SUMMARY</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">报告摘要</h2>
+        <div class="divider-gradient mb-10"></div>
+      </div>
+      <div class="glass-card rounded-2xl p-8 md:p-10 reveal">
+        <p class="text-text-secondary leading-loose text-base md:text-lg">
+          本报告聚焦京东 2026 年的平台产品体系与业务变化，并对自营业务的核心岗位 —— 采销，展开系统性分析。2026 年京东整体战略围绕四条主线展开：
+          <span class="text-brand-blue font-semibold">AI 驱动供应链、又好又便宜、自营与 POP 双轮驱动、全渠道履约</span>。平台产品从传统货架电商，向
+          <span class="text-accent-purple">"线上货架 + 即时零售 + 线下实体 + AI 商家工具 + 海外业务"</span>多形态演进；而采销作为京东自营模式的核心载体，承担选品采购、供应商管理、定价促销、库存管控等全链路职能，并对利润与 GMV 双向负责，是区别于传统采购与平台运营的生意操盘岗位。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 业务战略背景 -->
+  <section id="business" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal">
+        <div class="text-xs text-brand-blue font-mono mb-3">02 / BUSINESS ANALYSIS</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">平台与核心产品业务分析</h2>
+        <div class="divider-gradient mb-10"></div>
+      </div>
+
+      <!-- 战略背景 -->
+      <div class="glass-card rounded-2xl p-8 md:p-10 mb-12 reveal">
+        <h3 class="text-xl md:text-2xl font-semibold mb-6 flex items-center gap-3">
+          <span class="w-1 h-6 bg-gradient-to-b from-brand-blue to-accent-purple rounded-full"></span>
+          整体业务战略背景
+        </h3>
+        <p class="text-text-secondary leading-loose mb-6">
+          2026 年京东的核心经营逻辑：坚持供应链为本，以 <span class="text-brand-blue">JoyAI 大模型</span>作为技术底座，持续强化"又好又便宜"的用户心智。品类上，稳固 3C 家电传统优势，同时发力超市快消、户外运动、时尚美妆、宠物等增长类目；业态上，加码即时零售、线下京东 MALL 与海外 Joybuy 出海。自营与 POP 开放平台协同发展，AI 工具深度赋能商家与采销，最终追求 GMV 规模与经营利润的双向平衡。
+        </p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-lg bg-white/5 border border-white/5">
+            <div class="text-brand-blue text-2xl font-bold font-mono">3464 亿</div>
+            <div class="text-xs text-text-secondary mt-1">二季度集团营收</div>
+          </div>
+          <div class="p-4 rounded-lg bg-white/5 border border-white/5">
+            <div class="text-accent-purple text-2xl font-bold font-mono">22.9%</div>
+            <div class="text-xs text-text-secondary mt-1">服务收入占比提升</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 五大产品板块 -->
+      <div class="reveal mb-8">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">核心产品板块拆解</h3>
+        <p class="text-text-secondary text-sm">2026 平台产品矩阵的五大业务板块</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-12">
+        <!-- 板块1 -->
+        <div class="glass-card rounded-2xl p-7 reveal">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue/20 to-brand-blue/5 border border-brand-blue/30 flex items-center justify-center flex-shrink-0">
+              <span class="text-brand-blue font-bold text-lg">01</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold">京东主站 APP（货架电商）</h4>
+              <p class="text-xs text-text-tertiary mt-1">核心流量载体</p>
+            </div>
+          </div>
+          <ul class="space-y-3 text-sm text-text-secondary">
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">AI 品类洞察</b>：自动挖掘搜索/评论/成交数据，输出潜力类目与新品机会，支持采销联合工厂做 C2M 反向定制爆品。</span></li>
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">商品分层体系</b>：自营/自营定制/POP/京喜自营货品分层，突出产业带定制商品。</span></li>
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">大促产品升级</b>：简化满减逻辑，AI 自动比价强化全网对标。</span></li>
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">PLUS 会员权益扩容</b>：打通线上、即时零售、线下 MALL 权益。</span></li>
+          </ul>
+        </div>
+
+        <!-- 板块2 -->
+        <div class="glass-card rounded-2xl p-7 reveal">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-purple/20 to-accent-purple/5 border border-accent-purple/30 flex items-center justify-center flex-shrink-0">
+              <span class="text-accent-purple font-bold text-lg">02</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold">即时零售</h4>
+              <p class="text-xs text-text-tertiary mt-1">京东外卖、小时达</p>
+            </div>
+          </div>
+          <p class="text-sm text-text-secondary leading-relaxed mb-3">
+            2026 年重点发力的高频履约矩阵：依托京东到家与京东外卖，商超、家电、医药商品可实现 30-60 分钟达。
+          </p>
+          <div class="p-3 rounded-lg bg-accent-purple/5 border border-accent-purple/15 text-xs text-text-secondary">
+            <b class="text-accent-purple">采销新形态：</b>负责商超、日用、餐饮供给的供应商引进、定价与库存协同，对履约时效和门店库存联动提出更高要求。
+          </div>
+        </div>
+
+        <!-- 板块3 -->
+        <div class="glass-card rounded-2xl p-7 reveal">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue/20 to-accent-purple/10 border border-brand-blue/30 flex items-center justify-center flex-shrink-0">
+              <span class="gradient-text font-bold text-lg">03</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold">AI 商家 & 采销经营工具</h4>
+              <p class="text-xs text-text-tertiary mt-1">2026 商家大会重点</p>
+            </div>
+          </div>
+          <ul class="space-y-3 text-sm text-text-secondary">
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">AI 品类规划</b>：输入行业数据自动输出品类结构建议、价格带机会、新品方向。</span></li>
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">AI 商智升级版</b>：数据看板，自动诊断 GMV 下滑、毛利异常、库存周转风险。</span></li>
+            <li class="flex gap-2"><span class="text-brand-blue">▸</span><span><b class="text-white">AI 营销工具</b>：自动生成活动方案、促销策略。</span></li>
+          </ul>
+        </div>
+
+        <!-- 板块4 -->
+        <div class="glass-card rounded-2xl p-7 reveal">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-purple/20 to-brand-blue/10 border border-accent-purple/30 flex items-center justify-center flex-shrink-0">
+              <span class="gradient-text font-bold text-lg">04</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold">线下实体业态</h4>
+              <p class="text-xs text-text-tertiary mt-1">京东 MALL、京东家电专卖店</p>
+            </div>
+          </div>
+          <p class="text-sm text-text-secondary leading-relaxed">
+            京东 MALL 持续扩张，主打家电家居场景体验，形成线上选品、线下体验、线上成交的闭环。<b class="text-white">线上采销需协同线下业态</b>，统筹同款商品的线上线下定价与库存分配，<span class="text-brand-blue">线上一盘货</span>由此成为采销的新课题。
+          </p>
+        </div>
+
+        <!-- 板块5 -->
+        <div class="glass-card rounded-2xl p-7 reveal md:col-span-2">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue/20 to-accent-purple/20 border border-brand-blue/30 flex items-center justify-center flex-shrink-0">
+              <span class="gradient-text font-bold text-lg">05</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold">出海业务 Joybuy</h4>
+              <p class="text-xs text-text-tertiary mt-1">欧洲等海外市场扩张</p>
+              <p class="text-sm text-text-secondary leading-relaxed mt-3">
+                成熟的国内采销经验向海外复制，部分采销岗位已参与出海选品与供应链搭建。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 优势 vs 短板 -->
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="reveal">
+          <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-brand-blue"></span>产品核心竞争优势
+          </h3>
+          <div class="space-y-3">
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-brand-blue text-xs font-mono">01</span>
+                <h5 class="font-semibold text-sm">自营供应链壁垒</h5>
+              </div>
+              <p class="text-xs text-text-secondary">货权自营模式，商品品控、货源、定价、库存可深度把控。</p>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-brand-blue text-xs font-mono">02</span>
+                <h5 class="font-semibold text-sm">全渠道履约能力</h5>
+              </div>
+              <p class="text-xs text-text-secondary">京东物流仓配 + 即时零售小时达 + 线下门店，多履约网络覆盖。</p>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-brand-blue text-xs font-mono">03</span>
+                <h5 class="font-semibold text-sm">AI + 供应链深度结合</h5>
+              </div>
+              <p class="text-xs text-text-secondary">AI 已深入选品、采购、库存预测、供应商管理等 B 端业务环节。</p>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-brand-blue text-xs font-mono">04</span>
+                <h5 class="font-semibold text-sm">品类纵深完整</h5>
+              </div>
+              <p class="text-xs text-text-secondary">3C 家电到大商超、运动户外、美妆时尚、产业带定制商品全覆盖。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-accent-purple"></span>当前产品体系短板
+          </h3>
+          <div class="space-y-3">
+            <div class="glass-card rounded-xl p-5 border-accent-purple/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-accent-purple text-xs font-mono">01</span>
+                <h5 class="font-semibold text-sm">自营与 POP 价格冲突</h5>
+              </div>
+              <p class="text-xs text-text-secondary">第三方商家生态扩张，需采销持续做货品区隔。</p>
+            </div>
+            <div class="glass-card rounded-xl p-5 border-accent-purple/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-accent-purple text-xs font-mono">02</span>
+                <h5 class="font-semibold text-sm">即时零售盈利模型待打磨</h5>
+              </div>
+              <p class="text-xs text-text-secondary">业务尚处投入期，供给丰富度与商家盈利模型不确定。</p>
+            </div>
+            <div class="glass-card rounded-xl p-5 border-accent-purple/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-accent-purple text-xs font-mono">03</span>
+                <h5 class="font-semibold text-sm">AI 工具需人工校验</h5>
+              </div>
+              <p class="text-xs text-text-secondary">输出结果需采销结合行业经验校验，不能完全替代人。</p>
+            </div>
+            <div class="glass-card rounded-xl p-5 border-accent-purple/20">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-accent-purple text-xs font-mono">04</span>
+                <h5 class="font-semibold text-sm">产业带供应链管控难</h5>
+              </div>
+              <p class="text-xs text-text-secondary">定制商品对采销供应商管理、品控能力提出更高要求。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 采销岗位 -->
+  <section id="role" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal">
+        <div class="text-xs text-brand-blue font-mono mb-3">03 / ROLE DEEP DIVE</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">京东采销岗位深度分析</h2>
+        <div class="divider-gradient mb-10"></div>
+      </div>
+
+      <!-- 岗位定位 -->
+      <div class="glass-card rounded-2xl p-8 md:p-10 mb-12 reveal">
+        <h3 class="text-xl md:text-2xl font-semibold mb-6 flex items-center gap-3">
+          <span class="w-1 h-6 bg-gradient-to-b from-brand-blue to-accent-purple rounded-full"></span>
+          采销岗位定位与本质
+        </h3>
+        <p class="text-text-secondary leading-loose mb-6">
+          京东采销是<span class="text-brand-blue font-semibold">自营模式下的品类生意操盘手</span>，融合采购 + 销售 + 品类运营。<b class="text-white">采销既要管"采（进货、供应商谈判）"，又要管"销（销售目标、促销、利润）"</b>，货权属于京东，对品类
+          <span class="text-accent-purple">GMV、毛利、库存周转</span>三大核心结果直接负责。
+        </p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-xl bg-brand-blue/5 border border-brand-blue/20">
+            <div class="text-xs text-brand-blue font-mono mb-2">POP 平台商家运营</div>
+            <p class="text-sm text-text-secondary">商家自己持有货权，平台只做撮合。</p>
+          </div>
+          <div class="p-5 rounded-xl bg-accent-purple/5 border border-accent-purple/20">
+            <div class="text-xs text-accent-purple font-mono mb-2">京东采销</div>
+            <p class="text-sm text-text-secondary">京东持有货权，风险由平台承担。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 工作职责 Tab -->
+      <div class="reveal mb-8">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">采销完整工作职责</h3>
+        <p class="text-text-secondary text-sm">点击切换不同工作板块</p>
+      </div>
+
+      <div class="reveal mb-8">
+        <div class="flex flex-wrap gap-3 mb-6">
+          <button class="tab-btn active px-5 py-2.5 rounded-lg text-sm font-medium" data-tab="purchase">采端 · 采购与供应商管理</button>
+          <button class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium" data-tab="sales">销端 · 销售与品类运营</button>
+          <button class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium" data-tab="supply">供应链端 · 库存与风险</button>
+          <button class="tab-btn px-5 py-2.5 rounded-lg text-sm font-medium" data-tab="cross">跨部门协同</button>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 md:p-8" id="tabContent">
+          <!-- 动态注入 -->
+        </div>
+      </div>
+
+      <!-- 工作流程 -->
+      <div class="reveal mb-8">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">采销岗位完整工作流程</h3>
+        <p class="text-text-secondary text-sm">7 步闭环生意操盘</p>
+      </div>
+
+      <div class="reveal mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="flow-node rounded-xl p-5">
+            <div class="text-brand-blue text-xs font-mono mb-2">STEP 01</div>
+            <h5 class="font-semibold text-sm mb-2">市场与数据分析</h5>
+            <p class="text-xs text-text-secondary">分析行业趋势、竞品、用户数据，输出品类机会。</p>
+          </div>
+          <div class="flow-node rounded-xl p-5">
+            <div class="text-brand-blue text-xs font-mono mb-2">STEP 02</div>
+            <h5 class="font-semibold text-sm mb-2">供应商沟通谈判</h5>
+            <p class="text-xs text-text-secondary">引进品牌/工厂，谈采购条件，确定供货清单。</p>
+          </div>
+          <div class="flow-node rounded-xl p-5">
+            <div class="text-brand-blue text-xs font-mono mb-2">STEP 03</div>
+            <h5 class="font-semibold text-sm mb-2">商品上架</h5>
+            <p class="text-xs text-text-secondary">完成采购合同、入库、上架自营。</p>
+          </div>
+          <div class="flow-node rounded-xl p-5">
+            <div class="text-brand-blue text-xs font-mono mb-2">STEP 04</div>
+            <h5 class="font-semibold text-sm mb-2">运营操盘</h5>
+            <p class="text-xs text-text-secondary">定价、日常活动、流量争取，监控销售毛利。</p>
+          </div>
+          <div class="flow-node rounded-xl p-5">
+            <div class="text-accent-purple text-xs font-mono mb-2">STEP 05</div>
+            <h5 class="font-semibold text-sm mb-2">库存动态管理</h5>
+            <p class="text-xs text-text-secondary">根据销售持续补货，处理滞销。</p>
+          </div>
+          <div class="flow-node rounded-xl p-5">
+            <div class="text-accent-purple text-xs font-mono mb-2">STEP 06</div>
+            <h5 class="font-semibold text-sm mb-2">大促专项</h5>
+            <p class="text-xs text-text-secondary">锁货锁价、盯销售库存价格、复盘。</p>
+          </div>
+          <div class="flow-node last-node rounded-xl p-5">
+            <div class="text-accent-purple text-xs font-mono mb-2">STEP 07</div>
+            <h5 class="font-semibold text-sm mb-2">复盘迭代</h5>
+            <p class="text-xs text-text-secondary">复盘爆品滞销原因，优化下一期品类规划。</p>
+          </div>
+          <div class="flow-node last-node rounded-xl p-5 bg-gradient-to-br from-brand-blue/10 to-accent-purple/10 border-brand-blue/40">
+            <div class="gradient-text text-xs font-mono mb-2">LOOP ↻</div>
+            <h5 class="font-semibold text-sm mb-2">闭环迭代</h5>
+            <p class="text-xs text-text-secondary">回到 STEP 01，持续优化品类与供应商策略。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="reveal mb-8">
+        <h3 class="text-xl md:text-2xl font-semibold mb-2">采销岗位核心 KPI 考核指标</h3>
+        <p class="text-text-secondary text-sm">6 项核心结果指标</p>
+      </div>
+
+      <div class="reveal grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="glass-card rounded-xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h5 class="font-semibold text-sm">GMV 销售额</h5>
+            <span class="text-xs text-brand-blue font-mono">KPI 01</span>
+          </div>
+          <p class="text-xs text-text-secondary mb-3">品类销售规模达成率</p>
+          <div class="data-bar"><span data-value="95"></span></div>
+          <div class="flex justify-between text-xs text-text-tertiary mt-1">
+            <span>权重</span><span>核心</span>
+          </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h5 class="font-semibold text-sm">毛利 / 毛利率</h5>
+            <span class="text-xs text-brand-blue font-mono">KPI 02</span>
+          </div>
+          <p class="text-xs text-text-secondary mb-3">自营核心指标，平衡销量与盈利</p>
+          <div class="data-bar"><span data-value="90"></span></div>
+          <div class="flex justify-between text-xs text-text-tertiary mt-1">
+            <span>权重</span><span>核心</span>
+          </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h5 class="font-semibold text-sm">库存周转天数</h5>
+            <span class="text-xs text-accent-purple font-mono">KPI 03</span>
+          </div>
+          <p class="text-xs text-text-secondary mb-3">供应链健康度、资金使用效率</p>
+          <div class="data-bar"><span data-value="85"></span></div>
+          <div class="flex justify-between text-xs text-text-tertiary mt-1">
+            <span>权重</span><span>核心</span>
+          </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h5 class="font-semibold text-sm">价格竞争力</h5>
+            <span class="text-xs text-accent-purple font-mono">KPI 04</span>
+          </div>
+          <p class="text-xs text-text-secondary mb-3">对标全网竞品价格，保证低价心智</p>
+          <div class="data-bar"><span data-value="80"></span></div>
+          <div class="flex justify-between text-xs text-text-tertiary mt-1">
+            <span>权重</span><span>重要</span>
+          </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h5 class="font-semibold text-sm">供应商指标</h5>
+            <span class="text-xs text-accent-purple font-mono">KPI 05</span>
+          </div>
+          <p class="text-xs text-text-secondary mb-3">履约率、新品开发数量、定制爆品产出</p>
+          <div class="data-bar"><span data-value="75"></span></div>
+          <div class="flex justify-between text-xs text-text-tertiary mt-1">
+            <span>权重</span><span>重要</span>
+          </div>
+        </div>
+        <div class="glass-card rounded-xl p-6">
+          <div class="flex items-center justify-between mb-3">
+            <h5 class="font-semibold text-sm">用户指标</h5>
+            <span class="text-xs text-text-tertiary font-mono">KPI 06</span>
+          </div>
+          <p class="text-xs text-text-secondary mb-3">差评率、商品满意度、缺货率</p>
+          <div class="data-bar"><span data-value="70"></span></div>
+          <div class="flex justify-between text-xs text-text-tertiary mt-1">
+            <span>权重</span><span>关注</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 机遇与挑战 -->
+  <section id="opportunity" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal">
+        <div class="text-xs text-brand-blue font-mono mb-3">04 / OPPORTUNITY & PRESSURE</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">2026 采销岗位机遇与痛点</h2>
+        <div class="divider-gradient mb-10"></div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <!-- 机遇 -->
+        <div class="reveal">
+          <div class="glass-card rounded-2xl p-7 h-full border-brand-blue/20">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-lg bg-brand-blue/15 border border-brand-blue/30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+              </div>
+              <h3 class="text-xl font-semibold">岗位发展机遇</h3>
+            </div>
+            <ul class="space-y-4">
+              <li class="flex gap-3">
+                <span class="text-brand-blue font-mono text-sm flex-shrink-0">01</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">AI 工具降低数据分析负担</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">采销精力转向商务谈判、策略决策、供应商共创。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-brand-blue font-mono text-sm flex-shrink-0">02</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">C2M 反向定制业务扩张</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">从买货升级到参与做产品，深度参与产品定义。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-brand-blue font-mono text-sm flex-shrink-0">03</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">业务赛道拓宽</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">3C 之外，运动户外、大商超、即时零售、出海等赛道带来多元岗位机会。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-brand-blue font-mono text-sm flex-shrink-0">04</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">业务锻炼价值高</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">接触生意全链路，未来发展可去往品牌渠道、产品、供应链方向。</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 痛点 -->
+        <div class="reveal">
+          <div class="glass-card rounded-2xl p-7 h-full border-accent-purple/20">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 rounded-lg bg-accent-purple/15 border border-accent-purple/30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-accent-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5 19h14a2 2 0 001.84-2.75L13.74 4a2 2 0 00-3.48 0L3.16 16.25A2 2 0 005 19z"/></svg>
+              </div>
+              <h3 class="text-xl font-semibold">业务现实痛点与压力</h3>
+            </div>
+            <ul class="space-y-4">
+              <li class="flex gap-3">
+                <span class="text-accent-purple font-mono text-sm flex-shrink-0">01</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">多方利益平衡难题</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">消费者要低价、供应商要利润、平台要 GMV+毛利，三方诉求天然冲突。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-accent-purple font-mono text-sm flex-shrink-0">02</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">双指标压力</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">既要规模又要利润，不能冲销量牺牲毛利，也不能求毛利失市场。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-accent-purple font-mono text-sm flex-shrink-0">03</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">库存风险压力</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">自营货权归属京东，销量预测一旦失误，积压或缺货的责任直接落到采销身上。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-accent-purple font-mono text-sm flex-shrink-0">04</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">大促高强度工作</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">618、双 11 实时盯价格库存销量，突发问题多。</p>
+                </div>
+              </li>
+              <li class="flex gap-3">
+                <span class="text-accent-purple font-mono text-sm flex-shrink-0">05</span>
+                <div>
+                  <h5 class="font-medium text-sm mb-1">市场竞争加剧</h5>
+                  <p class="text-xs text-text-secondary leading-relaxed">拼多多、抖音电商持续价格竞争，要求更有竞争力的供货条件。</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 胜任力模型 -->
+  <section id="competency" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal">
+        <div class="text-xs text-brand-blue font-mono mb-3">05 / COMPETENCY MODEL</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">采销岗位胜任力模型</h2>
+        <div class="divider-gradient mb-10"></div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <!-- 硬能力 -->
+        <div class="reveal">
+          <h3 class="text-xl font-semibold mb-5 flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-brand-blue/15 border border-brand-blue/30 flex items-center justify-center text-brand-blue text-xs font-mono">硬</span>
+            硬能力
+          </h3>
+          <div class="space-y-4">
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">数据分析能力</h5>
+                <span class="text-xs text-brand-blue font-mono">90%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">看懂销售、毛利、库存数据，识别业务异常点。</p>
+              <div class="data-bar"><span data-value="90"></span></div>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">电商行业认知</h5>
+                <span class="text-xs text-brand-blue font-mono">85%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">理解电商完整链路，懂促销逻辑、价格体系。</p>
+              <div class="data-bar"><span data-value="85"></span></div>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">商业敏感度</h5>
+                <span class="text-xs text-brand-blue font-mono">80%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">看懂行业趋势，识别爆品机会，理解产品成本构成。</p>
+              <div class="data-bar"><span data-value="80"></span></div>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">工具能力</h5>
+                <span class="text-xs text-brand-blue font-mono">75%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">Excel 数据处理、商智平台、AI 工具辅助业务分析。</p>
+              <div class="data-bar"><span data-value="75"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 软素质 -->
+        <div class="reveal">
+          <h3 class="text-xl font-semibold mb-5 flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg bg-accent-purple/15 border border-accent-purple/30 flex items-center justify-center text-accent-purple text-xs font-mono">软</span>
+            软素质
+          </h3>
+          <div class="space-y-4">
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">商务谈判</h5>
+                <span class="text-xs text-accent-purple font-mono">95%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">善与供应商博弈，找到双赢方案而非单纯压价。</p>
+              <div class="data-bar"><span data-value="95"></span></div>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">多任务抗压</h5>
+                <span class="text-xs text-accent-purple font-mono">90%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">同时管理多供应商、几十上百 SKU 与大促突发问题。</p>
+              <div class="data-bar"><span data-value="90"></span></div>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">跨部门沟通</h5>
+                <span class="text-xs text-accent-purple font-mono">85%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">向内部争取流量、活动资源，协调物流、财务。</p>
+              <div class="data-bar"><span data-value="85"></span></div>
+            </div>
+            <div class="glass-card rounded-xl p-5">
+              <div class="flex items-center justify-between mb-3">
+                <h5 class="font-semibold text-sm">风险意识 & 结果导向</h5>
+                <span class="text-xs text-accent-purple font-mono">80%</span>
+              </div>
+              <p class="text-xs text-text-secondary mb-3">对库存/价格/品质风险敏感，一切策略回归生意结果。</p>
+              <div class="data-bar"><span data-value="80"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 总结与启示 -->
+  <section id="conclusion" class="py-20 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="reveal">
+        <div class="text-xs text-brand-blue font-mono mb-3">06 / CONCLUSION</div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">总结与启示</h2>
+        <div class="divider-gradient mb-10"></div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-8 md:p-12 reveal mb-8">
+        <p class="text-text-secondary leading-loose text-base md:text-lg mb-6">
+          2026 年，京东产品体系已从传统货架电商升级为<span class="text-brand-blue font-semibold">"AI 供应链驱动，线上 + 即时零售 + 线下多渠道协同"</span>的综合零售生态。AI 更多承担工具底座的角色，核心业务逻辑依旧回归零售本质：
+          <span class="text-accent-purple font-semibold">选好货、做好价格、管好供应链、满足用户需求</span>。
+        </p>
+        <p class="text-text-secondary leading-loose text-base md:text-lg">
+          采销作为京东自营的灵魂岗位，不是简单采购，而是<span class="text-white font-semibold">完整品类生意操盘手</span>。岗位最大价值，就是在消费者、供应商、平台三方之间找到平衡，通过选品、谈判、运营、库存管控实现品类健康增长。
+        </p>
+      </div>
+
+      <div class="reveal">
+        <div class="metric-chip rounded-2xl p-8 md:p-10">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-blue to-accent-purple flex items-center justify-center flex-shrink-0">
+              <svg class="w-6 h-6 text-base" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-lg md:text-xl font-semibold mb-3 gradient-text">对求职人员启示</h3>
+              <p class="text-text-secondary leading-loose text-sm md:text-base">
+                面试采销岗位，不能只强调沟通能力，更要展现<b class="text-white">生意思维：懂得权衡销量、利润、库存与供应商关系，具备发现业务机会、化解业务风险的意识</b>。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="border-t border-white/5 py-10 px-6">
+    <div class="max-w-7xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-blue to-accent-purple flex items-center justify-center font-bold text-xs">JD</div>
+        <span class="text-sm font-semibold">京东 2026 报告</span>
+      </div>
+      <p class="text-xs text-text-tertiary">本文为分析性内容，供求职备考、面试准备与课程学习参考</p>
+      <p class="text-xs text-text-tertiary mt-2 font-mono">© 2026 · Built with Tailwind CSS + Vanilla JS</p>
+    </div>
+  </footer>
+
+  <script>
+    // ============ Tab 数据 ============
+    const tabData = {
+      purchase: {
+        title: '采端 · 采购与供应商管理',
+        items: [
+          { t: '品类规划', d: '基于平台数据、行业趋势、竞品分析，确定本品类的商品结构、价格带布局，明确哪些价位、细分产品需要补齐。' },
+          { t: '供应商招商引进与商务谈判', d: '和品牌方、工厂、产业带工厂谈判，确定采购进价、账期、返利、毛保、定制产品合作方案。' },
+          { t: '新品开发、C2M 定制', d: '联合工厂开发京东专供款、定制款商品，打造自营爆品，如京喜定制智能门锁、超市联合定制食品。' },
+          { t: '供应商维护与考核', d: '监控供应商供货能力、产品品质，淘汰不合格供应商，维护长期合作关系。' },
+        ],
+      },
+      sales: {
+        title: '销端 · 销售与品类运营',
+        items: [
+          { t: '定价管理', d: '结合采购成本、竞品价格、平台毛利目标制定零售价，大促期间价格调整，维护全网价格竞争力。' },
+          { t: '活动策划落地', d: '618、双 11、日常秒杀、品类日，规划选品、资源申请、促销方案，争取站内流量资源。' },
+          { t: '商品运营优化', d: '推动商品详情页优化、短视频直播、内容营销，提升点击率、转化率。' },
+          { t: '用户洞察', d: '分析用户评论、搜索反馈，反向推动供应商迭代产品，解决用户痛点。' },
+        ],
+      },
+      supply: {
+        title: '供应链端 · 库存与风险管控',
+        items: [
+          { t: '补货计划与销量预测', d: '制定补货计划，预测销量，管控库存周转天数，平衡缺货损失与库存积压。' },
+          { t: '滞销商品清仓', d: '监控滞销商品及时做清仓处理，控制损耗。' },
+          { t: '退换货与质量管控', d: '处理退换货、质量相关供应链问题。' },
+        ],
+      },
+      cross: {
+        title: '跨部门协同',
+        items: [
+          { t: '协同京东物流（仓配）', d: '统筹仓配资源、履约时效。' },
+          { t: '协同平台运营', d: '争取流量资源，活动资源位。' },
+          { t: '协同 AI 数据部门、客服、财务', d: '向上承接业务目标，横向争取资源，向下管理供应商。' },
+        ],
+      },
+    };
+
+    const tabContent = document.getElementById('tabContent');
+    const tabBtns = document.querySelectorAll('.tab-btn');
+
+    function renderTab(key) {
+      const data = tabData[key];
+      if (!data) return;
+      tabContent.innerHTML = `
+        <h4 class="text-lg md:text-xl font-semibold mb-6 gradient-text">${data.title}</h4>
+        <div class="grid sm:grid-cols-2 gap-4">
+          ${data.items.map((it, i) => `
+            <div class="p-4 rounded-lg bg-white/5 border border-white/5 hover:border-brand-blue/30 transition-colors">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs text-brand-blue font-mono">${String(i+1).padStart(2,'0')}</span>
+                <h5 class="font-semibold text-sm">${it.t}</h5>
+              </div>
+              <p class="text-xs text-text-secondary leading-relaxed">${it.d}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+    renderTab('purchase');
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderTab(btn.dataset.tab);
+      });
+    });
+
+    // ============ 滚动揭示 ============
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // ============ 数据条触发 ============
+    const barObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const span = entry.target;
+          const value = span.dataset.value;
+          if (value) span.style.width = value + '%';
+          barObserver.unobserve(span);
+        }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.data-bar > span').forEach(el => barObserver.observe(el));
+
+    // ============ 导航高亮 ============
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link[data-target]');
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const link = document.querySelector(`.nav-link[data-target="${entry.target.id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
+    sections.forEach(s => navObserver.observe(s));
+
+    // ============ 移动端菜单 ============
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+  </script>
+</body>
+</html>
